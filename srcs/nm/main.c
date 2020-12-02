@@ -1,51 +1,83 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   nm.c                                               :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matheme <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: matheme <matheme@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 14:12:05 by matheme           #+#    #+#             */
-/*   Updated: 2020/11/24 14:52:37 by matheme          ###   ########lyon.fr   */
+/*   Updated: 2020/12/02 17:50:01 by matheme          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <fcntl.h>
-#include <sys/stat.h>
-#include <stdlib.h>
+#include "nm.h"
 
-int main(int ac, char **av) {
-
-	struct stat *buffer = (struct stat*)malloc(sizeof(*stat));
-
-	if (ac == 2) {
-		int fd = open(av[1], O_RDONLY);
-		fstat(fd, buffer);
-		printf("%-36s %lds\n","time of file creation(birth)", buffer->st_birthtimespec.tv_sec);
-		printf("%-36s %lds\n","time of last data modification", buffer->st_mtimespec.tv_sec);
-		printf("%-36s %lds\n","time of last status change", buffer->st_ctimespec.tv_sec);
-		printf("%-36s %lds\n","time of last access", buffer->st_atimespec.tv_sec);
-
-
-		printf("%-36s %hu\n","[XSI] Number of hard links", buffer->st_nlink);
-		printf("%-36s %p\n","RESERVED: DO NOT USE!", buffer->st_qspare);
-		printf("%-36s %d\n","RESERVED: DO NOT USE!", buffer->st_lspare);
-
-		printf("%-36s %llu\n","[XSI] File serial number", buffer->st_ino);
-		printf("%-36s %u\n","file generation number", buffer->st_gen);
-		printf("%-36s %d\n","[XSI] Device ID", buffer->st_rdev);
-		printf("%-36s %d\n","[XSI] ID of device containing file", buffer->st_dev);
-		printf("%-36s %u\n","[XSI] Group ID of the file", buffer->st_gid);
-		printf("%-36s %u\n","[XSI] User ID of the file", buffer->st_uid);
-		printf("%-36s %hu\n","[XSI] Mode of file (see below)", buffer->st_mode);
-		printf("%-36s %u\n","user defined flags for file", buffer->st_flags);
-
-		printf("%-36s %d\n","optimal blocksize for I/O", buffer->st_blksize);
-		printf("%-36s %lld\n","blocks allocated for file", buffer->st_blocks);
-		printf("%-36s %lld\n","[XSI] file size, in bytes", buffer->st_size);
-		return (1);
+static void	catch_nm_error(int code)
+{
+	if (code == WrongFile)
+	{
+		ft_putstr("nm: ");
+		ft_putstr(g_file()->name);
+		ft_putstr(" The file was not recognized as a valid object file\n");
 	}
+	else if (code == CorruptBin)
+	{
+		ft_putstr("nm: ");
+		ft_putstr(g_file()->name);
+		ft_putstr("truncated or malformed object (load commands extend past the end of the file)\n");
+	}
+	else if (code == CorruptLibrary)
+	{
+		ft_putstr("nm: ");
+		ft_putstr("Mach-O universal file: ");
+		ft_putstr(g_file()->name);
+		ft_putstr(" for architecture x86_64 is not a Mach-O file or an archive file.\n");
+	}
+}
 
-	return (0);
+int			main(int ac, char **av)
+{
+	int			fd;
+	char		*ptr;
+	struct stat buf;
+	int			i;
+
+	i = 0;
+	while (++i < ac || (ac == 1 && i == 1))
+	{
+		g_file()->name = ac > 1 ? av[i] : "a.out";
+		if ((fd = open(g_file()->name, O_RDONLY)) < 0)
+		{
+			ft_putstr("nm: ");
+			ft_putstr(g_file()->name);
+			ft_putstr(": No such file or directory.\n");
+			continue ;
+		}
+		if (fstat(fd, &buf) < 0)
+		{
+			ft_putstr("nm: ");
+			ft_putstr("an error has occurred.\n");
+			continue ;
+		}
+		g_file()->size = buf.st_size;
+		if ((ptr = mmap(0,  buf.st_size, PROT_READ, MAP_PRIVATE, fd, 0)) == MAP_FAILED)
+		{
+			ft_putstr("nm: ");
+			ft_putstr(g_file()->name);
+			ft_putstr(": Is a directory.\n");
+			continue ;
+		}
+		if (ac > 2)
+		{
+			printf("\n%s:\n", g_file()->name);
+		}
+		catch_nm_error(nm(ptr));
+		if (munmap(ptr,  buf.st_size) < 0)
+		{
+			ft_putstr("nm: ");
+			ft_putstr("an error has occurred.\n");
+			continue ;
+		}
+	}
+	return (EXIT_SUCCESS);
 }

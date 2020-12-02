@@ -1,19 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_putnstr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: matheme <matheme@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/24 14:17:57 by matheme           #+#    #+#             */
-/*   Updated: 2020/12/02 17:46:47 by matheme          ###   ########lyon.fr   */
+/*   Created: 2020/12/02 11:49:49 by matheme           #+#    #+#             */
+/*   Updated: 2020/12/02 14:21:37 by matheme          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
+#include "libft.h"
 
-int		main(void)
+void	ft_putnstr(const char *str, const unsigned int n)
 {
-	printf("hallo");
-	return (0);
+	if (!str)
+		return ;
+	write(1, str, n);
 }

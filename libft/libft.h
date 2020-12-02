@@ -1,15 +1,15 @@
 /* ************************************************************************** */
-/*                                                          LE - /            */
-/*                                                              /             */
-/*   libft.h                                          .::    .:/ .      .::   */
-/*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: matheme <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
-/*                                                 #+#   #+    #+    #+#      */
-/*   Created: 2018/10/04 14:39:00 by matheme      #+#   ##    ##    #+#       */
-/*   Updated: 2018/10/11 17:14:49 by matheme     ###    #+. /#+    ###.fr     */
-/*                                                         /                  */
-/*                                                        /                   */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   libft.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: matheme <matheme@student.42lyon.fr>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/10/04 14:39:00 by matheme           #+#    #+#             */
+/*   Updated: 2020/12/02 12:04:15 by matheme          ###   ########lyon.fr   */
+/*                                                                            */
 /* ************************************************************************** */
+
 
 #ifndef LIBFT_H
 # define LIBFT_H
@@ -89,4 +89,7 @@ int					ft_power(int nb, int power);
 void				ft_putadresse(const void *adresse);
 int					ft_list_size(t_list *begin_list);
 void				ft_putdoubletab(char **tab);
+size_t				ft_strplen(const char *str);
+void				ft_putnstr(const char *str, const unsigned int n);
+
 #endif

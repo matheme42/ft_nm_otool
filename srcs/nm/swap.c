@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   swap.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: matheme <matheme@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/24 14:17:57 by matheme           #+#    #+#             */
-/*   Updated: 2020/12/02 17:46:47 by matheme          ###   ########lyon.fr   */
+/*   Created: 2020/11/30 15:45:52 by matheme           #+#    #+#             */
+/*   Updated: 2020/12/02 17:45:20 by matheme          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
+#include "nm.h"
 
-int		main(void)
+uint32_t	swap_uint32t(uint32_t nb)
 {
-	printf("hallo");
-	return (0);
+	return ((nb >> 24 & 0xff) | (nb >> 8 & 0xff00) |
+		(nb << 8 & 0xff0000) | (nb << 24 & 0xff000000));
 }

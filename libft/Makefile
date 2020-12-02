@@ -1,15 +1,15 @@
 # **************************************************************************** #
-#                                                           LE - /             #
-#                                                               /              #
-#    Makefile                                         .::    .:/ .      .::    #
-#                                                  +:+:+   +:    +:  +:+:+     #
-#    By: yalabidi <marvin@le-101.fr>                +:+   +:    +:    +:+      #
-#                                                  #+#   #+    #+    #+#       #
-#    Created: 2018/10/03 11:06:26 by yalabidi     #+#   ##    ##    #+#        #
-#    Updated: 2018/10/13 18:55:56 by matheme     ###    #+. /#+    ###.fr      #
-#                                                          /                   #
-#                                                         /                    #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: matheme <matheme@student.42lyon.fr>        +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2018/10/03 11:06:26 by yalabidi          #+#    #+#              #
+#    Updated: 2020/12/02 12:03:57 by matheme          ###   ########lyon.fr    #
+#                                                                              #
 # **************************************************************************** #
+
 
 NAME=libft.a
 
@@ -62,6 +62,8 @@ OBJ= 	ft_memcpy.o\
 		ft_strmapi.o\
 		ft_strequ.o\
 		ft_strnequ.o\
+		ft_strplen.o\
+		ft_putnstr.o\
 		ft_strsub.o\
 		ft_strjoin.o\
 		ft_strtrim.o\

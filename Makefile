@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: matheme <marvin@42.fr>                     +#+  +:+       +#+         #
+#    By: matheme <matheme@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/24 13:54:31 by matheme           #+#    #+#              #
-#    Updated: 2020/11/24 15:11:20 by matheme          ###   ########lyon.fr    #
+#    Updated: 2020/12/02 14:46:30 by matheme          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,8 +27,8 @@ OTOOL_OBJ_PATH	= otool_obj
 INC_PATH		= includes
 HEADER			= $(INC_PATH)/nm.h $(INC_PATH)/otool.h
 
-NM_NAME_SRC		= main.c
-OTOOL_NAME_SRC	= main.c
+NM_NAME_SRC		=	main.c handle_64.c handle_32.c nm.c sort_64.c  sort_32.c swap.c symbol.c handle_fat.c handle_ar.c g_file.c
+OTOOL_NAME_SRC	=	main.c
 
 
 # les objects
@@ -55,13 +55,13 @@ $(OTOOL_NAME) : $(OTOOL_OBJ) $(LIBFT.A)
 
 $(NM_OBJ_PATH)/%.o : $(NM_SRC_PATH)/%.c $(INC_PATH)/nm.h
 	@mkdir $(NM_OBJ_PATH) 2> /dev/null || true
-	@$(CC) -I $(LIBFT) -I $(INC_PATH) -c $< -o $@
+	@$(CC) -I $(LIBFT_INC) -I $(INC_PATH) -c $< -o $@
 	@printf "\033[2K\r${G} >>Compiling ${N}$<\033[36m \033[0m"
 
 
 $(OTOOL_OBJ_PATH)/%.o : $(OTOOL_SRC_PATH)/%.c $(INC_PATH)/otool.h
 	@mkdir $(OTOOL_OBJ_PATH) 2> /dev/null || true
-	@$(CC) -I $(LIBFT) -I $(INC_PATH) -c $< -o $@
+	@$(CC) -I $(LIBFT_INC) -I $(INC_PATH) -c $< -o $@
 	@printf "\033[2K\r${G} >>Compiling ${N}$<\033[36m \033[0m"
 
 lib:
