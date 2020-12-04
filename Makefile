@@ -6,13 +6,13 @@
 #    By: matheme <matheme@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/24 13:54:31 by matheme           #+#    #+#              #
-#    Updated: 2020/12/02 14:46:30 by matheme          ###   ########lyon.fr    #
+#    Updated: 2020/12/04 17:37:56 by matheme          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
 # nom de l'executable
-NM_NAME = nm
-OTOOL_NAME = otool
+NM_NAME = ft_nm
+OTOOL_NAME = ft_otool
 
 #sources
 SRC_GPATH		= srcs
@@ -27,7 +27,7 @@ OTOOL_OBJ_PATH	= otool_obj
 INC_PATH		= includes
 HEADER			= $(INC_PATH)/nm.h $(INC_PATH)/otool.h
 
-NM_NAME_SRC		=	main.c handle_64.c handle_32.c nm.c sort_64.c  sort_32.c swap.c symbol.c handle_fat.c handle_ar.c g_file.c
+NM_NAME_SRC		=	main.c handle_64.c handle_32.c nm.c sort.c swap.c symbol.c handle_fat.c handle_ar.c g_file.c get_cpu_type.c
 OTOOL_NAME_SRC	=	main.c
 
 

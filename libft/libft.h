@@ -6,7 +6,7 @@
 /*   By: matheme <matheme@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/04 14:39:00 by matheme           #+#    #+#             */
-/*   Updated: 2020/12/02 12:04:15 by matheme          ###   ########lyon.fr   */
+/*   Updated: 2020/12/04 17:05:54 by matheme          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ void				ft_putadresse(const void *adresse);
 int					ft_list_size(t_list *begin_list);
 void				ft_putdoubletab(char **tab);
 size_t				ft_strplen(const char *str);
+size_t				ft_strnlen(const char *str, size_t n);
 void				ft_putnstr(const char *str, const unsigned int n);
 
 #endif

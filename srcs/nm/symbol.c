@@ -6,7 +6,7 @@
 /*   By: matheme <matheme@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/30 16:05:48 by matheme           #+#    #+#             */
-/*   Updated: 2020/12/02 17:58:16 by matheme          ###   ########lyon.fr   */
+/*   Updated: 2020/12/03 18:00:35 by matheme          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,5 +40,5 @@ char		get_symbol(u_int8_t symbol, long long *isect, uint8_t n)
 		return (get_section_letter(isect, n));
 	if (symbol == N_INDR)
 		return ('I');
-	return ('?');
+	return ('-');
 }

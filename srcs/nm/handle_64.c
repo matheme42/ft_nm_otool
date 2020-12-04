@@ -6,55 +6,51 @@
 /*   By: matheme <matheme@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/30 15:33:23 by matheme           #+#    #+#             */
-/*   Updated: 2020/12/02 17:56:37 by matheme          ###   ########lyon.fr   */
+/*   Updated: 2020/12/04 17:21:22 by matheme          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm.h"
 
-/*
-** cette fonction a pour but de 
-*/
-
 static void print_output(struct symtab_command *sym, char *ptr, long long *isect) {
 	int				i;
 	char			*name; 
-	struct nlist_64 *array;
+	struct nlist_64	*array;
 	int				*sort_index;
 	char			type;
 
 	i = 0;
-	array = (void*)ptr + sym->symoff;
-	sort_index = sort_nlist_64(sym, ptr);
-	while(i < sym->nsyms) {
+	array = (void*)ptr + LITTLE_BIG(sym->symoff);
+	sort_index = sort_nlist(sym, ptr);
+	while(i < LITTLE_BIG(sym->nsyms)) {
 		if ((array[sort_index[i]].n_type & N_STAB) != 0) {
 			i++;
 			continue ;
 		}
 
-		name = (void*)ptr + sym->stroff + array[sort_index[i]].n_un.n_strx;
+		name = (void*)ptr + LITTLE_BIG(sym->stroff) + LITTLE_BIG(array[sort_index[i]].n_un.n_strx);
 		type = get_symbol(array[sort_index[i]].n_type, isect, array[sort_index[i]].n_sect);
 		type = !(array[sort_index[i]].n_type & N_EXT) ? type + 32 : type;
-		if (array[sort_index[i]].n_value != 0 || type == 'T') {
-			dprintf(1, "%.16llx %c ",array[sort_index[i]].n_value, type);
-			ft_putnstr(name, ft_strplen(name));
-			ft_putchar('\n');
-		} else {
-			dprintf(1, "%16s %c ","", type);
-			ft_putnstr(name, ft_strplen(name));
-			ft_putchar('\n');
+		if (LITTLE_BIG(array[sort_index[i]].n_value) != 0 || type == 'T') {
+			dprintf(1, "%.16llx %c ", LITTLE_BIG(array[sort_index[i]].n_value), type);
+		} else
+		{
+			dprintf(1, "%16s %c ", "", type);
 		}
+			ft_putnstr(name, ft_strplen(name));
+		 	ft_putchar('\n');
 		i++;
 	}
 }
 
-static void get_info_segment(struct segment_command_64 *seg, long long *isect)
+static void get_info_segment(struct segment_command_64 *seg, long long *isect, char *ptr)
 {
 	struct section_64 *sect = (void *)seg + sizeof(*seg);
 	int i;
 
 	i = 0;
-	while (i < seg->nsects)
+
+	while (i < LITTLE_BIG(seg->nsects))
 	{
 		*isect += 1;
 		if (!ft_strcmp(sect[i].segname, SEG_TEXT) && !ft_strcmp(sect[i].sectname, SECT_TEXT))
@@ -74,28 +70,26 @@ int		handle_64(void *ptr)
 {
 	int			                    ncmds;
 	int			                    i;
-	struct		mach_header_64      *header;
+	struct		mach_header_64		*header;
 	struct		load_command		*lc;
 	long long                  		isect;
 
 	header = (struct mach_header_64 *)  ptr;
-	ncmds = header->ncmds;
+	ncmds = LITTLE_BIG(header->ncmds);
 	lc = (void *) ptr + sizeof(*header);
 	isect = 0;
 	i = 0;
 	while (i < ncmds) {
-		if (lc->cmd == LC_SEGMENT_64) {
-				get_info_segment((struct segment_command_64 *) lc, &isect);
+		if (LITTLE_BIG(lc->cmd) == LC_SEGMENT_64) {
+				get_info_segment((struct segment_command_64 *) lc, &isect, ptr);
 		}
-		if (lc->cmd == LC_SYMTAB) {
-			struct symtab_command *x = (struct symtab_command *)lc;
+		else if (LITTLE_BIG(lc->cmd) == LC_SYMTAB) {
 			print_output((struct symtab_command *) lc, ptr, &isect);
 		}
-		lc = (void*)lc + lc->cmdsize;
+		lc = (void*)lc + LITTLE_BIG(lc->cmdsize);
 		i++;
 	}
-
-	if ((void*)header + header->sizeofcmds + sizeof(*header) != (void*)lc) {
+	if ((void*)header + LITTLE_BIG(header->sizeofcmds) + sizeof(*header) != (void*)lc) {
 		return (CorruptBin);
 	}
 	return (Success);

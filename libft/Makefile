@@ -6,7 +6,7 @@
 #    By: matheme <matheme@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/10/03 11:06:26 by yalabidi          #+#    #+#              #
-#    Updated: 2020/12/02 12:03:57 by matheme          ###   ########lyon.fr    #
+#    Updated: 2020/12/04 17:08:51 by matheme          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -63,6 +63,7 @@ OBJ= 	ft_memcpy.o\
 		ft_strequ.o\
 		ft_strnequ.o\
 		ft_strplen.o\
+		ft_strnlen.o\
 		ft_putnstr.o\
 		ft_strsub.o\
 		ft_strjoin.o\
