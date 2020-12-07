@@ -6,7 +6,7 @@
 #    By: matheme <matheme@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/24 13:54:31 by matheme           #+#    #+#              #
-#    Updated: 2020/12/04 17:37:56 by matheme          ###   ########lyon.fr    #
+#    Updated: 2020/12/07 15:15:39 by matheme          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,6 +16,7 @@ OTOOL_NAME = ft_otool
 
 #sources
 SRC_GPATH		= srcs
+NM_OT_SRC_PATH	= $(SRC_GPATH)/nm_otool
 NM_SRC_PATH		= $(SRC_GPATH)/nm
 OTOOL_SRC_PATH	= $(SRC_GPATH)/otool
 
@@ -25,15 +26,15 @@ OTOOL_OBJ_PATH	= otool_obj
 
 #includes
 INC_PATH		= includes
-HEADER			= $(INC_PATH)/nm.h $(INC_PATH)/otool.h
+HEADER			= $(INC_PATH)/nm.h $(INC_PATH)/otool.h $(INC_PATH)/nm_otool.h
 
-NM_NAME_SRC		=	main.c handle_64.c handle_32.c nm.c sort.c swap.c symbol.c handle_fat.c handle_ar.c g_file.c get_cpu_type.c
-OTOOL_NAME_SRC	=	main.c
-
+NM_OT_NAME_SRC	=	nm_otool.c sort.c swap.c symbol.c handle_fat.c handle_ar.c g_file.c get_cpu_type.c
+NM_NAME_SRC		=	handle_64.c handle_32.c main.c
+OTOOL_NAME_SRC	=	handle_64.c handle_32.c main.c
 
 # les objects
-NM_OBJ				= $(addprefix $(NM_OBJ_PATH)/,$(NM_NAME_SRC:.c=.o))
-OTOOL_OBJ			= $(addprefix $(OTOOL_OBJ_PATH)/,$(OTOOL_NAME_SRC:.c=.o))
+NM_OBJ				= $(addprefix $(NM_OBJ_PATH)/,$(NM_NAME_SRC:.c=.o)) $(addprefix $(NM_OBJ_PATH)/,$(NM_OT_NAME_SRC:.c=.o))
+OTOOL_OBJ			= $(addprefix $(OTOOL_OBJ_PATH)/,$(OTOOL_NAME_SRC:.c=.o)) $(addprefix $(NM_OBJ_PATH)/,$(NM_OT_NAME_SRC:.c=.o))
 
 #compilateur + flags
 CC			=	gcc #-g3 -fsanitize=address -g3
@@ -47,22 +48,34 @@ LIBFT.A				= $(LIBFT)/libft.a
 
 all : lib $(NM_NAME) $(OTOOL_NAME)
 
-$(NM_NAME) : $(NM_OBJ) $(LIBFT.A)
+$(NM_NAME) : $(NM_OBJ) $(NM_OTOOL_OBJ) $(LIBFT.A)
 	@$(CC) -I $(LIBFT_INC) -L $(LIBFT) $^ -o $@ && printf "\n\n${B}[EXECUTABLE \"$(NM_NAME)\" COMPILED]${N}\n\n"
 
-$(OTOOL_NAME) : $(OTOOL_OBJ) $(LIBFT.A)
+$(OTOOL_NAME) : $(OTOOL_OBJ) $(NM_OTOOL_OBJ) $(LIBFT.A)
 	@$(CC) -I $(LIBFT_INC) -L $(LIBFT) $^ -o $@ && printf "\n\n${B}[EXECUTABLE \"$(OTOOL_NAME)\" COMPILED]${N}\n\n"
 
-$(NM_OBJ_PATH)/%.o : $(NM_SRC_PATH)/%.c $(INC_PATH)/nm.h
+
+$(NM_OBJ_PATH)/%.o : $(NM_SRC_PATH)/%.c $(INC_PATH)/nm.h $(INC_PATH)/nm_otool.h
 	@mkdir $(NM_OBJ_PATH) 2> /dev/null || true
 	@$(CC) -I $(LIBFT_INC) -I $(INC_PATH) -c $< -o $@
 	@printf "\033[2K\r${G} >>Compiling ${N}$<\033[36m \033[0m"
 
-
-$(OTOOL_OBJ_PATH)/%.o : $(OTOOL_SRC_PATH)/%.c $(INC_PATH)/otool.h
+$(OTOOL_OBJ_PATH)/%.o : $(OTOOL_SRC_PATH)/%.c $(INC_PATH)/otool.h $(INC_PATH)/nm_otool.h
 	@mkdir $(OTOOL_OBJ_PATH) 2> /dev/null || true
 	@$(CC) -I $(LIBFT_INC) -I $(INC_PATH) -c $< -o $@
 	@printf "\033[2K\r${G} >>Compiling ${N}$<\033[36m \033[0m"
+
+
+$(NM_OBJ_PATH)/%.o : $(NM_OT_SRC_PATH)/%.c $(INC_PATH)/nm.h $(INC_PATH)/nm_otool.h
+	@mkdir $(NM_OBJ_PATH) 2> /dev/null || true
+	@$(CC) -I $(LIBFT_INC) -I $(INC_PATH) -c $< -o $@
+	@printf "\033[2K\r${G} >>Compiling ${N}$<\033[36m \033[0m"
+
+$(OTOOL_OBJ_PATH)/%.o : $(NM_OT_SRC_PATH)/%.c $(INC_PATH)/otool.h $(INC_PATH)/nm_otool.h
+	@mkdir $(OTOOL_OBJ_PATH) 2> /dev/null || true
+	@$(CC) -I $(LIBFT_INC) -I $(INC_PATH) -c $< -o $@
+	@printf "\033[2K\r${G} >>Compiling ${N}$<\033[36m \033[0m"
+
 
 lib:
 	@make -C $(LIBFT)

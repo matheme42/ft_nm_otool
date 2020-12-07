@@ -6,7 +6,7 @@
 /*   By: matheme <matheme@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/02 08:10:50 by matheme           #+#    #+#             */
-/*   Updated: 2020/12/04 16:01:53 by matheme          ###   ########lyon.fr   */
+/*   Updated: 2020/12/07 15:05:02 by matheme          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int			ar_handle(void *ptr)
 		len = ft_strlen(str);
 		while (!str[len++])
 			;
-		if ((error = nm(str + len - 1)))
+		if ((error = nm_otool(str + len - 1)))
 			return (error);
 		ptr += ft_atoi(header->ar_size) + sizeof(*header);
 	}

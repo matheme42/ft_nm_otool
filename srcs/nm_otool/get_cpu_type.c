@@ -6,7 +6,7 @@
 /*   By: matheme <matheme@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/04 15:54:39 by matheme           #+#    #+#             */
-/*   Updated: 2020/12/04 16:00:20 by matheme          ###   ########lyon.fr   */
+/*   Updated: 2020/12/07 14:01:02 by matheme          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ t_arch_info	get_arch_info_from_cpu_type(cpu_type_t cputype, cpu_subtype_t cpusub
 	int		index;
 
 	index = -1;
+
 	while (g_arch_info_table[++index].name)
 	{
 		if (g_arch_info_table[index].cputype == cputype && g_arch_info_table[index].cpusubtype == cpusubtype)

@@ -6,7 +6,7 @@
 /*   By: matheme <matheme@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/02 08:12:02 by matheme           #+#    #+#             */
-/*   Updated: 2020/12/04 16:23:13 by matheme          ###   ########lyon.fr   */
+/*   Updated: 2020/12/07 15:04:59 by matheme          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int		fat_handle(void *ptr)
 			cpu_name = get_arch_info_from_cpu_type(LITTLE_BIG(((struct fat_arch_64 *)arch)[i].cputype), LITTLE_BIG(((struct fat_arch_64 *)arch)[i].cpusubtype)).name;
 			if (ft_strcmp(cpu_name, "x86_64"))
 				print_name(cpu_name);
-			if ((error = nm((char*)ptr + LITTLE_BIG(((struct fat_arch_64 *)arch)[i].offset))))
+			if ((error = nm_otool((char*)ptr + LITTLE_BIG(((struct fat_arch_64 *)arch)[i].offset))))
 				return (error);
 			if (!ft_strcmp(cpu_name, "x86_64"))
 				break ;
@@ -76,7 +76,7 @@ int		fat_handle(void *ptr)
 			cpu_name = get_arch_info_from_cpu_type(LITTLE_BIG(((struct fat_arch *)arch)[i].cputype), LITTLE_BIG(((struct fat_arch *)arch)[i].cpusubtype)).name;
 			if (ft_strcmp(cpu_name, "x86_64"))
 				print_name(cpu_name);
-			if ((error = nm((char*)ptr + LITTLE_BIG(((struct fat_arch *)arch)[i].offset))))
+			if ((error = nm_otool((char*)ptr + LITTLE_BIG(((struct fat_arch *)arch)[i].offset))))
 				return (error);
 			if (!ft_strcmp(cpu_name, "x86_64"))
 				break ;

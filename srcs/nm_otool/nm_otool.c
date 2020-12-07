@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   nm.c                                               :+:      :+:    :+:   */
+/*   nm_otool.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: matheme <matheme@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/30 15:25:35 by matheme           #+#    #+#             */
-/*   Updated: 2020/12/04 14:23:12 by matheme          ###   ########lyon.fr   */
+/*   Updated: 2020/12/07 15:05:16 by matheme          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm.h"
 
-int		nm(char *ptr)
+int		nm_otool(char *ptr)
 {
 	int			(*tab[5])(void *) = {handle_32, handle_64, fat_handle, fat_handle, ar_handle};
 	const int	magictab[9] = {MH_MAGIC, MH_CIGAM, MH_MAGIC_64, MH_CIGAM_64,
