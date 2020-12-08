@@ -6,65 +6,49 @@
 /*   By: matheme <matheme@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/30 16:01:41 by matheme           #+#    #+#             */
-/*   Updated: 2020/12/04 17:00:12 by matheme          ###   ########lyon.fr   */
+/*   Updated: 2020/12/07 17:47:52 by matheme          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "nm.h"
+#include "otool.h"
 
-static void print_output(struct symtab_command *sym, char *ptr, long long *isect) {
-	int				i;
-	char			*name; 
-	struct nlist	*array;
-	int				*sort_index;
-	char			type;
+static void print_output(char *ptr, struct section *sect, char *arch_name) {
+	int i;
+	int size;
 
+	dprintf(1, "Contents of (__TEXT,__text) section");
 	i = 0;
-	array = (void*)ptr + LITTLE_BIG(sym->symoff);
-	sort_index = sort_nlist(sym, ptr);
-	while(i < LITTLE_BIG(sym->nsyms)) {
-		if ((array[sort_index[i]].n_type & N_STAB) != 0) {
-			i++;
-			continue ;
+	while (i < LITTLE_BIG(sect->size)) {
+	if (i % 16 == 0) {
+		dprintf(1, "\n%.8llx        ", (uint64_t)LITTLE_BIG(sect->addr) + i);
+	} else {
+		if (!ft_strcmp(arch_name, "ppc"))
+		{
+			if (i % 4 == 0) {
+				dprintf(1, " ");
+			}
 		}
-
-		name = (void*)ptr + LITTLE_BIG(sym->stroff) + LITTLE_BIG(array[sort_index[i]].n_un.n_strx);
-		type = get_symbol(array[sort_index[i]].n_type, isect, array[sort_index[i]].n_sect);
-		type = !(array[sort_index[i]].n_type & N_EXT) ? type + 32 : type;
-		if (LITTLE_BIG(array[sort_index[i]].n_value) != 0 || type == 'T') {
-			dprintf(1, "%.8x %c ",(unsigned int)LITTLE_BIG(array[sort_index[i]].n_value), type);
-			ft_putnstr(name, ft_strplen(name));
-			ft_putchar('\n');
-		} else {
-			dprintf(1, "%8s %c ","", type);
-			ft_putnstr(name, ft_strplen(name));
-			ft_putchar('\n');
-		 }
+		else
+		{
+			dprintf(1, " ");
+		}
+	}
+		dprintf(1, "%.2hhx", *(ptr + LITTLE_BIG(sect->offset) + i));
 		i++;
 	}
 }
 
-static void get_info_segment(struct segment_command *seg, long long *isect, char *ptr)
+static struct section *get_info_segment(struct segment_command *seg, char *ptr)
 {
 	struct section *sect = (void *)seg + sizeof(*seg);
-	int i;
 
-	i = 0;
-
-	while (i < LITTLE_BIG(seg->nsects))
-	{
-		*isect += 1;
-		if (!ft_strcmp(sect[i].segname, SEG_TEXT) && !ft_strcmp(sect[i].sectname, SECT_TEXT))
-		{
-			*isect |= ((*isect & Sect) << TextOffset);
-		}
-		else if (!ft_strcmp(sect[i].segname, SEG_DATA))
-		{
-			 !ft_strcmp(sect[i].sectname, SECT_DATA) ? *isect |= ((*isect & Sect) << DataOffset) : 0;
-			 !ft_strcmp(sect[i].sectname, SECT_BSS) ? *isect |= ((*isect & Sect) << BssOffset) : 0;
+	for (int i = 0 ; i < LITTLE_BIG(seg->nsects) ; i++) {
+		if (!ft_strcmp(sect[i].segname, SEG_TEXT) && !ft_strcmp(sect[i].sectname, SECT_TEXT)) {
+			return (sect + i);
 		}
 		i++;
 	}
+	return (NULL);
 }
 
 int		handle_32(void *ptr)
@@ -73,25 +57,25 @@ int		handle_32(void *ptr)
 	int			                    i;
 	struct		mach_header			*header;
 	struct		load_command		*lc;
-	long long                  		isect;
+	struct		section				*sect;
+	char							*name;
 
 	header = (struct mach_header *)  ptr;
 	ncmds = LITTLE_BIG(header->ncmds);
 	lc = (void *) ptr + sizeof(*header);
-	isect = 0;
 	i = 0;
+	sect = NULL;
 	while (i < ncmds) {
-		if (LITTLE_BIG(lc->cmd) == LC_SEGMENT) {
-				get_info_segment((struct segment_command *) lc, &isect, ptr);
-		}
-		else if (LITTLE_BIG(lc->cmd) == LC_SYMTAB) {
-			print_output((struct symtab_command *) lc, ptr, &isect);
-		}
+		if (sect == NULL && LITTLE_BIG(lc->cmd) == LC_SEGMENT)
+			sect = get_info_segment((struct segment_command *) lc, ptr);
 		lc = (void*)lc + LITTLE_BIG(lc->cmdsize);
 		i++;
 	}
-	if ((void*)header + LITTLE_BIG(header->sizeofcmds) + sizeof(*header) != (void*)lc) {
+	if ((void*)header + LITTLE_BIG(header->sizeofcmds) + sizeof(*header) != (void*)lc)
 		return (CorruptBin);
+	if (sect != NULL) {
+		name = get_arch_info_from_cpu_type(LITTLE_BIG(header->cputype), LITTLE_BIG(header->cpusubtype)).name;
+		print_output(ptr, sect, name);
 	}
 	return (Success);
 }

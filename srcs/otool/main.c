@@ -6,7 +6,7 @@
 /*   By: matheme <matheme@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 14:12:05 by matheme           #+#    #+#             */
-/*   Updated: 2020/12/07 15:16:12 by matheme          ###   ########lyon.fr   */
+/*   Updated: 2020/12/08 17:28:45 by matheme          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int			main(int ac, char **av)
 	int			i;
 
 	i = 0;
+	g_file()->programme_name = "otool";
 	while (++i < ac || (ac == 1 && i == 1))
 	{
 		g_file()->name = ac > 1 ? av[i] : "a.out";
@@ -79,5 +80,7 @@ int			main(int ac, char **av)
 			continue ;
 		}
 	}
+	dprintf(1, "\n");
+	free(g_file);
 	return (EXIT_SUCCESS);
 }

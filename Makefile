@@ -6,7 +6,7 @@
 #    By: matheme <matheme@student.42lyon.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/11/24 13:54:31 by matheme           #+#    #+#              #
-#    Updated: 2020/12/07 15:15:39 by matheme          ###   ########lyon.fr    #
+#    Updated: 2020/12/08 17:23:37 by matheme          ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,8 +28,8 @@ OTOOL_OBJ_PATH	= otool_obj
 INC_PATH		= includes
 HEADER			= $(INC_PATH)/nm.h $(INC_PATH)/otool.h $(INC_PATH)/nm_otool.h
 
-NM_OT_NAME_SRC	=	nm_otool.c sort.c swap.c symbol.c handle_fat.c handle_ar.c g_file.c get_cpu_type.c
-NM_NAME_SRC		=	handle_64.c handle_32.c main.c
+NM_OT_NAME_SRC	=	nm_otool.c handle_fat.c handle_ar.c g_file.c get_cpu_type.c
+NM_NAME_SRC		=	handle_64.c handle_32.c main.c symbol.c sort.c 
 OTOOL_NAME_SRC	=	handle_64.c handle_32.c main.c
 
 # les objects
@@ -42,9 +42,8 @@ CFLAGS		=  -Wall -Wextra -Werror
 
 #librairies
 LIBFT				= libft
-LIBFT_INC			= libft
+LIBFT_INC			= libft/includes
 LIBFT.A				= $(LIBFT)/libft.a
-
 
 all : lib $(NM_NAME) $(OTOOL_NAME)
 

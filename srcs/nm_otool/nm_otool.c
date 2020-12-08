@@ -6,11 +6,11 @@
 /*   By: matheme <matheme@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/30 15:25:35 by matheme           #+#    #+#             */
-/*   Updated: 2020/12/07 15:05:16 by matheme          ###   ########lyon.fr   */
+/*   Updated: 2020/12/08 12:57:24 by matheme          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "nm.h"
+#include "nm_otool.h"
 
 int		nm_otool(char *ptr)
 {

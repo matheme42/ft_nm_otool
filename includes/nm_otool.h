@@ -6,14 +6,14 @@
 /*   By: matheme <matheme@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/07 12:37:00 by matheme           #+#    #+#             */
-/*   Updated: 2020/12/07 15:11:51 by matheme          ###   ########lyon.fr   */
+/*   Updated: 2020/12/08 17:21:40 by matheme          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef NM_OTOOL_H
 # define NM_OTOOL_H
 
-# include "libft.h"
+# include "ft_printf.h"
 # include <fcntl.h>
 # include <sys/stat.h>
 # include <sys/mman.h>
@@ -38,6 +38,8 @@
 #define WrongFile 1
 #define CorruptBin 2
 #define CorruptLibrary 3
+#define MalformedFatFile 4
+#define TruncateObject 5
 
 typedef enum				e_endian {
 	BIG,
@@ -45,13 +47,15 @@ typedef enum				e_endian {
 	UNKNOWN
 }							t_endian;
 
+
 typedef struct 		s_file
 {
+	char			*programme_name;
 	char			*name;
 	int				size;
 }					t_file;
 
-#define LITTLE_BIG(x) ((*(int*)ptr == FAT_CIGAM || *(int*)ptr == FAT_CIGAM_64 || *(int*)ptr == MH_CIGAM  || *(int*)ptr == MH_CIGAM_64) ? byte_swap(x, sizeof(x)) : x)
+#define LITTLE_BIG(x) ((*(int*)ptr == FAT_CIGAM || *(int*)ptr == FAT_CIGAM_64 || *(int*)ptr == MH_CIGAM  || *(int*)ptr == MH_CIGAM_64) ? swap_byte(x, sizeof(x)) : x)
 
 typedef struct				s_arch_info
 {
@@ -75,8 +79,6 @@ char		get_symbol(u_int8_t symbol, long long *isect, uint8_t n);
 void		print_output_64(struct symtab_command *sym, char *ptr, long long sect_n);
 
 int			*sort_nlist(struct symtab_command *sym, char *ptr);
-
-uint64_t	byte_swap(uint64_t k, size_t size);
 
 t_file		*g_file();
 

@@ -6,7 +6,7 @@
 /*   By: matheme <matheme@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 14:12:05 by matheme           #+#    #+#             */
-/*   Updated: 2020/12/07 15:11:04 by matheme          ###   ########lyon.fr   */
+/*   Updated: 2020/12/08 17:28:51 by matheme          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,18 @@ static void	catch_nm_error(int code)
 		ft_putstr(g_file()->name);
 		ft_putstr(" for architecture x86_64 is not a Mach-O file or an archive file.\n");
 	}
+	else if (code == MalformedFatFile)
+	{
+		ft_putstr(PROGRAM_NAME);
+		ft_putstr(g_file()->name);
+		ft_putstr(" truncated or malformed fat file\n");
+	}
+	else if (code == TruncateObject)
+	{
+		ft_putstr(PROGRAM_NAME);
+		ft_putstr(g_file()->name);
+		ft_putstr(" truncated or malformed object\n");
+	}
 }
 
 int			main(int ac, char **av)
@@ -43,6 +55,7 @@ int			main(int ac, char **av)
 	int			i;
 
 	i = 0;
+	g_file()->programme_name = "nm";
 	while (++i < ac || (ac == 1 && i == 1))
 	{
 		g_file()->name = ac > 1 ? av[i] : "a.out";
@@ -69,7 +82,7 @@ int			main(int ac, char **av)
 		}
 		if (ac > 2)
 		{
-			printf("\n%s:\n", g_file()->name);
+			ft_printf("\n%s:\n", g_file()->name);
 		}
 		catch_nm_error(nm_otool(ptr));
 		if (munmap(ptr,  buf.st_size) < 0)
@@ -79,5 +92,6 @@ int			main(int ac, char **av)
 			continue ;
 		}
 	}
+	free(g_file);
 	return (EXIT_SUCCESS);
 }

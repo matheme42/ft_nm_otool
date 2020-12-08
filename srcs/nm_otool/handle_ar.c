@@ -6,11 +6,11 @@
 /*   By: matheme <matheme@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/02 08:10:50 by matheme           #+#    #+#             */
-/*   Updated: 2020/12/07 15:05:02 by matheme          ###   ########lyon.fr   */
+/*   Updated: 2020/12/08 17:29:23 by matheme          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "nm.h"
+#include "nm_otool.h"
 
 static int	check_ar_struct(void *ptr)
 {
@@ -48,7 +48,7 @@ int			ar_handle(void *ptr)
 	{
 		header = (struct ar_hdr *)ptr;
 		str = ptr + sizeof(*header);
-		dprintf(1, "\n%s(%s):\n", g_file()->name, str);
+		ft_printf("\n%s(%s):\n", g_file()->name, str);
 		len = ft_strlen(str);
 		while (!str[len++])
 			;

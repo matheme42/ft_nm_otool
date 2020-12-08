@@ -6,64 +6,50 @@
 /*   By: matheme <matheme@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/30 15:33:23 by matheme           #+#    #+#             */
-/*   Updated: 2020/12/04 17:21:22 by matheme          ###   ########lyon.fr   */
+/*   Updated: 2020/12/07 17:50:08 by matheme          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "nm.h"
+#include "otool.h"
 
-static void print_output(struct symtab_command *sym, char *ptr, long long *isect) {
-	int				i;
-	char			*name; 
-	struct nlist_64	*array;
-	int				*sort_index;
-	char			type;
+static void print_output(char *ptr, struct section_64 *sect, char *arch_name) {
+	int i;
+	int size;
+
+	dprintf(1, "Contents of (__TEXT,__text) section");
 
 	i = 0;
-	array = (void*)ptr + LITTLE_BIG(sym->symoff);
-	sort_index = sort_nlist(sym, ptr);
-	while(i < LITTLE_BIG(sym->nsyms)) {
-		if ((array[sort_index[i]].n_type & N_STAB) != 0) {
-			i++;
-			continue ;
-		}
-
-		name = (void*)ptr + LITTLE_BIG(sym->stroff) + LITTLE_BIG(array[sort_index[i]].n_un.n_strx);
-		type = get_symbol(array[sort_index[i]].n_type, isect, array[sort_index[i]].n_sect);
-		type = !(array[sort_index[i]].n_type & N_EXT) ? type + 32 : type;
-		if (LITTLE_BIG(array[sort_index[i]].n_value) != 0 || type == 'T') {
-			dprintf(1, "%.16llx %c ", LITTLE_BIG(array[sort_index[i]].n_value), type);
-		} else
+	while (i < LITTLE_BIG(sect->size)) {
+	if (i % 16 == 0) {
+		dprintf(1, "\n%.16llx        ", (uint64_t)LITTLE_BIG(sect->addr) + i);
+	} else {
+		if (!ft_strcmp(arch_name, "ppc"))
 		{
-			dprintf(1, "%16s %c ", "", type);
+			if (i % 4 == 0) {
+				dprintf(1, " ");
+			}
 		}
-			ft_putnstr(name, ft_strplen(name));
-		 	ft_putchar('\n');
+		else
+		{
+			dprintf(1, " ");
+		}
+	}
+		dprintf(1, "%.2hhx", *(ptr + LITTLE_BIG(sect->offset) + i));
 		i++;
 	}
 }
 
-static void get_info_segment(struct segment_command_64 *seg, long long *isect, char *ptr)
+static struct section_64 *get_info_segment(struct segment_command_64 *seg, char *ptr)
 {
 	struct section_64 *sect = (void *)seg + sizeof(*seg);
-	int i;
 
-	i = 0;
-
-	while (i < LITTLE_BIG(seg->nsects))
-	{
-		*isect += 1;
-		if (!ft_strcmp(sect[i].segname, SEG_TEXT) && !ft_strcmp(sect[i].sectname, SECT_TEXT))
-		{
-			*isect |= ((*isect & Sect) << TextOffset);
-		}
-		else if (!ft_strcmp(sect[i].segname, SEG_DATA))
-		{
-			 !ft_strcmp(sect[i].sectname, SECT_DATA) ? *isect |= ((*isect & Sect) << DataOffset) : 0;
-			 !ft_strcmp(sect[i].sectname, SECT_BSS) ? *isect |= ((*isect & Sect) << BssOffset) : 0;
+	for (int i = 0 ; i < LITTLE_BIG(seg->nsects) ; i++) {
+		if (!ft_strcmp(sect[i].segname, SEG_TEXT) && !ft_strcmp(sect[i].sectname, SECT_TEXT)) {
+			return (sect + i);
 		}
 		i++;
 	}
+	return (NULL);
 }
 
 int		handle_64(void *ptr)
@@ -72,25 +58,25 @@ int		handle_64(void *ptr)
 	int			                    i;
 	struct		mach_header_64		*header;
 	struct		load_command		*lc;
-	long long                  		isect;
+	struct		section_64			*sect;
+	char							*name;
 
 	header = (struct mach_header_64 *)  ptr;
 	ncmds = LITTLE_BIG(header->ncmds);
 	lc = (void *) ptr + sizeof(*header);
-	isect = 0;
 	i = 0;
+	sect = NULL;
 	while (i < ncmds) {
-		if (LITTLE_BIG(lc->cmd) == LC_SEGMENT_64) {
-				get_info_segment((struct segment_command_64 *) lc, &isect, ptr);
-		}
-		else if (LITTLE_BIG(lc->cmd) == LC_SYMTAB) {
-			print_output((struct symtab_command *) lc, ptr, &isect);
-		}
+		if (sect == NULL && LITTLE_BIG(lc->cmd) == LC_SEGMENT_64)
+			sect = get_info_segment((struct segment_command_64 *) lc, ptr);
 		lc = (void*)lc + LITTLE_BIG(lc->cmdsize);
 		i++;
 	}
-	if ((void*)header + LITTLE_BIG(header->sizeofcmds) + sizeof(*header) != (void*)lc) {
+	if ((void*)header + LITTLE_BIG(header->sizeofcmds) + sizeof(*header) != (void*)lc)
 		return (CorruptBin);
+	if (sect != NULL) {
+		name = get_arch_info_from_cpu_type(LITTLE_BIG(header->cputype), LITTLE_BIG(header->cpusubtype)).name;
+		print_output(ptr, sect, name);
 	}
 	return (Success);
 }

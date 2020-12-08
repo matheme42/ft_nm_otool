@@ -6,11 +6,11 @@
 /*   By: matheme <matheme@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/04 15:54:39 by matheme           #+#    #+#             */
-/*   Updated: 2020/12/07 14:01:02 by matheme          ###   ########lyon.fr   */
+/*   Updated: 2020/12/08 12:57:27 by matheme          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "nm.h"
+#include "nm_otool.h"
 
 /*
 ** https://opensource.apple.com/source/cctools/cctools-410.1/libstuff/arch.c.auto.html
@@ -77,7 +77,6 @@ t_arch_info	get_arch_info_from_cpu_type(cpu_type_t cputype, cpu_subtype_t cpusub
 	int		index;
 
 	index = -1;
-
 	while (g_arch_info_table[++index].name)
 	{
 		if (g_arch_info_table[index].cputype == cputype && g_arch_info_table[index].cpusubtype == cpusubtype)
