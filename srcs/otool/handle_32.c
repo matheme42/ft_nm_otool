@@ -6,7 +6,7 @@
 /*   By: matheme <matheme@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/30 16:01:41 by matheme           #+#    #+#             */
-/*   Updated: 2020/12/09 13:59:46 by matheme          ###   ########lyon.fr   */
+/*   Updated: 2020/12/09 15:47:10 by matheme          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,22 +16,22 @@ static void print_output(char *ptr, struct section *sect, char *arch_name) {
 	int i;
 	int size;
 
-	dprintf(1, "Contents of (__TEXT,__text) section");
+	ft_printf("Contents of (__TEXT,__text) section");
 	i = 0;
 	while (i < LITTLE_BIG(sect->size)) {
 		if (i % 16 == 0) {
-			dprintf(1, "\n%.8llx\t", (uint64_t)LITTLE_BIG(sect->addr) + i);
+			ft_printf("\n%.8llx\t", (uint64_t)LITTLE_BIG(sect->addr) + i);
 		}
 		if (!ft_strcmp("ppc", arch_name))
 		{
-			dprintf(1, "%.2hhx", *(ptr + LITTLE_BIG(sect->offset) + i));
+			ft_printf("%.2hhx", *(ptr + LITTLE_BIG(sect->offset) + i));
 			if (i % 4 == 3)
 			{
 				ft_putchar(' ');
 			}
 		} else
 		{
-			dprintf(1, "%.2hhx ", *(ptr + LITTLE_BIG(sect->offset) + i));
+			ft_printf("%.2hhx ", *(ptr + LITTLE_BIG(sect->offset) + i));
 		}
 		i++;
 	}

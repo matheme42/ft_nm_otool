@@ -6,7 +6,7 @@
 /*   By: matheme <matheme@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/07 12:37:00 by matheme           #+#    #+#             */
-/*   Updated: 2020/12/08 17:21:40 by matheme          ###   ########lyon.fr   */
+/*   Updated: 2020/12/09 15:43:59 by matheme          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,6 @@
 # include <ar.h>
 # include <mach-o/fat.h>
 # include <mach-o/swap.h>
-
-# include <stdio.h>
 
 #define	TextOffset 16
 #define	DataOffset 32

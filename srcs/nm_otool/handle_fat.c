@@ -6,7 +6,7 @@
 /*   By: matheme <matheme@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/02 08:12:02 by matheme           #+#    #+#             */
-/*   Updated: 2020/12/09 13:59:49 by matheme          ###   ########lyon.fr   */
+/*   Updated: 2020/12/09 15:44:53 by matheme          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@
 
 void print_name(const char *cpu_name) {
 	if (!ft_strcmp(g_file()->programme_name, "otool")) {
-		dprintf(1, "\n%s (architecture %s):\n", g_file()->name, cpu_name);
+		ft_printf("\n%s (architecture %s):\n", g_file()->name, cpu_name);
 	} else {
-		dprintf(1, "\n%s (for architecture %s):\n", g_file()->name, cpu_name);
+		ft_printf("\n%s (for architecture %s):\n", g_file()->name, cpu_name);
 	}
 }
 
