@@ -6,7 +6,7 @@
 /*   By: matheme <matheme@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/30 16:01:41 by matheme           #+#    #+#             */
-/*   Updated: 2020/12/07 17:47:52 by matheme          ###   ########lyon.fr   */
+/*   Updated: 2020/12/09 13:59:46 by matheme          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,21 +19,20 @@ static void print_output(char *ptr, struct section *sect, char *arch_name) {
 	dprintf(1, "Contents of (__TEXT,__text) section");
 	i = 0;
 	while (i < LITTLE_BIG(sect->size)) {
-	if (i % 16 == 0) {
-		dprintf(1, "\n%.8llx        ", (uint64_t)LITTLE_BIG(sect->addr) + i);
-	} else {
-		if (!ft_strcmp(arch_name, "ppc"))
+		if (i % 16 == 0) {
+			dprintf(1, "\n%.8llx\t", (uint64_t)LITTLE_BIG(sect->addr) + i);
+		}
+		if (!ft_strcmp("ppc", arch_name))
 		{
-			if (i % 4 == 0) {
-				dprintf(1, " ");
+			dprintf(1, "%.2hhx", *(ptr + LITTLE_BIG(sect->offset) + i));
+			if (i % 4 == 3)
+			{
+				ft_putchar(' ');
 			}
-		}
-		else
+		} else
 		{
-			dprintf(1, " ");
+			dprintf(1, "%.2hhx ", *(ptr + LITTLE_BIG(sect->offset) + i));
 		}
-	}
-		dprintf(1, "%.2hhx", *(ptr + LITTLE_BIG(sect->offset) + i));
 		i++;
 	}
 }
@@ -64,10 +63,15 @@ int		handle_32(void *ptr)
 	ncmds = LITTLE_BIG(header->ncmds);
 	lc = (void *) ptr + sizeof(*header);
 	i = 0;
+	if (LITTLE_BIG(header->sizeofcmds) > g_file()->size) {
+		return (WrongFile);
+	}
 	sect = NULL;
 	while (i < ncmds) {
 		if (sect == NULL && LITTLE_BIG(lc->cmd) == LC_SEGMENT)
 			sect = get_info_segment((struct segment_command *) lc, ptr);
+		if ((void*)lc + LITTLE_BIG(lc->cmdsize) > ptr + g_file()->size)
+			break ;
 		lc = (void*)lc + LITTLE_BIG(lc->cmdsize);
 		i++;
 	}

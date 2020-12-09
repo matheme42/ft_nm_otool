@@ -6,7 +6,7 @@
 /*   By: matheme <matheme@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 14:12:05 by matheme           #+#    #+#             */
-/*   Updated: 2020/12/08 17:28:45 by matheme          ###   ########lyon.fr   */
+/*   Updated: 2020/12/09 13:59:45 by matheme          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,13 @@ int			main(int ac, char **av)
 		{
 			printf("\n%s:\n", g_file()->name);
 		}
+		if (*(int*)ptr == *(int*)ARMAG) {
+			ft_printf("Archive : %s", av[i]);
+		} else if (*(int*)ptr == FAT_CIGAM || *(int*)ptr == FAT_CIGAM_64 ||*(int*)ptr == FAT_MAGIC || *(int*)ptr == FAT_MAGIC_64) {
+			
+		} else {
+			ft_printf("%s:\n", av[i]);
+		}
 		catch_nm_error(nm_otool(ptr));
 		if (munmap(ptr,  buf.st_size) < 0)
 		{
@@ -80,7 +87,7 @@ int			main(int ac, char **av)
 			continue ;
 		}
 	}
-	dprintf(1, "\n");
-	free(g_file);
+	ft_printf("\n");
+	free(g_file());
 	return (EXIT_SUCCESS);
 }

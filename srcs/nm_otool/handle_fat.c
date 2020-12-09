@@ -6,7 +6,7 @@
 /*   By: matheme <matheme@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/02 08:12:02 by matheme           #+#    #+#             */
-/*   Updated: 2020/12/08 14:32:11 by matheme          ###   ########lyon.fr   */
+/*   Updated: 2020/12/09 13:59:49 by matheme          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,11 @@
 /// que l'on soit en little or big endian
 
 void print_name(const char *cpu_name) {
-	dprintf(1, "\n%s (for architecture %s):\n", g_file()->name, cpu_name);
+	if (!ft_strcmp(g_file()->programme_name, "otool")) {
+		dprintf(1, "\n%s (architecture %s):\n", g_file()->name, cpu_name);
+	} else {
+		dprintf(1, "\n%s (for architecture %s):\n", g_file()->name, cpu_name);
+	}
 }
 
 int check_fat_arch_data(struct fat_arch_64 *arch64, struct fat_arch *arch, char *ptr) {
@@ -33,7 +37,6 @@ int check_fat_arch_data(struct fat_arch_64 *arch64, struct fat_arch *arch, char 
 	else if (arch)
 	{
 		if (LITTLE_BIG(arch->cputype) == 0 ||
-		LITTLE_BIG(arch->cpusubtype) == 0 ||
 		LITTLE_BIG(arch->align) == 0 ||
 		LITTLE_BIG(arch->offset) == 0 ||
 		LITTLE_BIG(arch->size) == 0) {

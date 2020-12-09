@@ -6,7 +6,7 @@
 /*   By: matheme <matheme@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 14:12:05 by matheme           #+#    #+#             */
-/*   Updated: 2020/12/08 17:28:51 by matheme          ###   ########lyon.fr   */
+/*   Updated: 2020/12/09 13:59:59 by matheme          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,6 @@ int			main(int ac, char **av)
 			continue ;
 		}
 	}
-	free(g_file);
+	free(g_file());
 	return (EXIT_SUCCESS);
 }
