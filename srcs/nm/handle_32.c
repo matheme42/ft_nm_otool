@@ -6,7 +6,7 @@
 /*   By: matheme <matheme@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/30 16:01:41 by matheme           #+#    #+#             */
-/*   Updated: 2020/12/09 14:00:02 by matheme          ###   ########lyon.fr   */
+/*   Updated: 2020/12/11 11:34:58 by matheme          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static int print_output(struct symtab_command *sym, char *ptr, long long *isect)
 		name = (void*)ptr + LITTLE_BIG(sym->stroff) + LITTLE_BIG(array[sort_index[i]].n_un.n_strx);
 		type = get_symbol(array[sort_index[i]].n_type, isect, array[sort_index[i]].n_sect);
 		type = !(array[sort_index[i]].n_type & N_EXT) ? type + 32 : type;
-		if (LITTLE_BIG(array[sort_index[i]].n_value) != 0 || type == 'T') {
+		if ((LITTLE_BIG(array[sort_index[i]].n_value) != 0 && type != 'I' && type != 'i') || type == 'T' || type == 't' || type == 'a' || type == 'A') {
 			ft_printf("%.8x %c ",(unsigned int)LITTLE_BIG(array[sort_index[i]].n_value), type);
 			ft_print_until_non_printable(name);
 			ft_putchar('\n');
