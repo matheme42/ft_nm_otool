@@ -6,7 +6,7 @@
 /*   By: matheme <matheme@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 14:12:05 by matheme           #+#    #+#             */
-/*   Updated: 2020/12/09 15:45:42 by matheme          ###   ########lyon.fr   */
+/*   Updated: 2020/12/11 11:13:46 by matheme          ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,10 @@ int			main(int ac, char **av)
 			continue ;
 		}
 		g_file()->size = buf.st_size;
+		if (buf.st_size < sizeof(int)) {
+			catch_nm_error(WrongFile);
+			return (EXIT_FAILURE);
+		}
 		if ((ptr = mmap(0,  buf.st_size, PROT_READ, MAP_PRIVATE, fd, 0)) == MAP_FAILED)
 		{
 			ft_printf_err(PROGRAM_NAME);
